@@ -5,16 +5,19 @@ import defaultContacts from '../../data/contacts.json';
 
 const contactsReducer = createReducer(defaultContacts, {
   [addContact]: (state, { payload }) => {
-    if (
-      state.find(
-        contact => contact.name.toLowerCase() === payload.name.toLowerCase(),
-      )
-    ) {
+    const isDublicateName =  state.find(
+      contact => contact.name.toLowerCase() === payload.name.toLowerCase()
+    );
+    const isDublicateNumber = state.find(
+      contact => contact.number === payload.number,
+    );
+
+    if (isDublicateName) {
       alert(`${payload.name} is already in contacts.`);
-    } else if (state.find(contact => contact.number === payload.number)) {
-      alert(`${payload.number} is already in contacts.`);
+    } else if (isDublicateNumber) {
+       alert(`${payload.number} is already in contacts.`);
     } else if (!payload.name.trim() || !payload.number.trim()) {
-      alert("Enter the contact's name and number phone!");
+       alert("Enter the contact's name and number phone!");
     } return [...state, payload];
   },
 
@@ -23,7 +26,7 @@ const contactsReducer = createReducer(defaultContacts, {
 });
 
 const filterReducer = createReducer('', {
-  [filter]: (_, { payload }) => payload,
+  [filter]: (_state, { payload }) => payload,
 });
 
 export default combineReducers({
